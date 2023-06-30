@@ -1,0 +1,6 @@
+transformers
+debugpy
+python-dotenv
+torch
+Flask==2.0.1
+# xformers

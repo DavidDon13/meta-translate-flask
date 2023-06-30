@@ -1,0 +1,106 @@
+from transformers import pipeline
+
+CCMATRIX_MAPPING = {
+    "af": "afr_Latn",
+    "sq": "als_Latn",
+    "am": "amh_Ethi",
+    "ar": "arb_Arab",
+    "ast": "ast_Latn",
+    "az": "azj_Latn",
+    "be": "bel_Cyrl",
+    "bn": "ben_Beng",
+    "bg": "bul_Cyrl",
+    "ca": "cat_Latn",
+    "ceb": "ceb_Latn",
+    "cs": "ces_Latn",
+    "cy": "cym_Latn",
+    "da": "dan_Latn",
+    "de": "deu_Latn",
+    "el": "ell_Grek",
+    "en": "eng_Latn",
+    "eo": "epo_Latn",
+    "et": "est_Latn",
+    "fi": "fin_Latn",
+    "fr": "fra_Latn",
+    "om": "gaz_Latn",
+    "gd": "gla_Latn",
+    "ga": "gle_Latn",
+    "gl": "glg_Latn",
+    "ha": "hau_Latn",
+    "he": "heb_Hebr",
+    "hi": "hin_Deva",
+    "hr": "hrv_Latn",
+    "hu": "hun_Latn",
+    "hy": "hye_Armn",
+    "ig": "ibo_Latn",
+    "ilo": "ilo_Latn",
+    "id": "ind_Latn",
+    "is": "isl_Latn",
+    "it": "ita_Latn",
+    "jv": "jav_Latn",
+    "ja": "jpn_Jpan",
+    "ka": "kat_Geor",
+    "kk": "kaz_Cyrl",
+    "km": "khm_Khmr",
+    "ko": "kor_Hang",
+    "lt": "lit_Latn",
+    "lb": "ltz_Latn",
+    "lg": "lug_Latn",
+    "lv": "lvs_Latn",
+    "ml": "mal_Mlym",
+    "mr": "mar_Deva",
+    "mk": "mkd_Cyrl",
+    "my": "mya_Mymr",
+    "nl": "nld_Latn",
+    "no": "nob_Latn",
+    "ne": "npi_Deva",
+    "oc": "oci_Latn",
+    "or": "ory_Orya",
+    "fa": "pes_Arab",
+    "mg": "plt_Latn",
+    "pl": "pol_Latn",
+    "pt": "por_Latn",
+    "ro": "ron_Latn",
+    "ru": "rus_Cyrl",
+    "si": "sin_Sinh",
+    "sk": "slk_Latn",
+    "sl": "slv_Latn",
+    "sd": "snd_Arab",
+    "so": "som_Latn",
+    "es": "spa_Latn",
+    "sr": "srp_Cyrl",
+    "su": "sun_Latn",
+    "sv": "swe_Latn",
+    "sw": "swh_Latn",
+    "ta": "tam_Taml",
+    "tt": "tat_Cyrl",
+    "tl": "tgl_Latn",
+    "tr": "tur_Latn",
+    "uk": "ukr_Cyrl",
+    "ur": "urd_Arab",
+    "uz": "uzn_Latn",
+    "vi": "vie_Latn",
+    "wo": "wol_Latn",
+    "xh": "xho_Latn",
+    "yi": "ydd_Hebr",
+    "yo": "yor_Latn",
+    "zh": "zho_Hans",
+    "ms": "zsm_Latn",
+    "zu": "zul_Latn",
+}
+
+
+class CustomLanguageDetector:
+    def __init__(self):
+        self.model_name = "papluca/xlm-roberta-base-language-detection"
+        self.language_detector = pipeline("text-classification", model=self.model_name)
+
+    def predict(self, text):
+        prediction = self.language_detector(text)[0]
+        print(prediction)  # or use logging if you prefer
+        predicted_lang = prediction["label"].lower()
+
+        return CCMATRIX_MAPPING.get(predicted_lang, predicted_lang)
+
+
+detector = CustomLanguageDetector()
